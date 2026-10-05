@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "记账小宝",
+    "slug": "jizhang-xiaobao",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.jimmy.jizhangxiaobao",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#4F46E5"
+      }
+    }
+  }
+}
+

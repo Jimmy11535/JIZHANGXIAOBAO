@@ -25,7 +25,7 @@ jobs:
           java-version: '17'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 记账小宝-Android-APK
-          path: android/app/build/outputs/apk/release/*.apk
+          path: android/app/build/outputs/apk/**/*.apk

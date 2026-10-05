@@ -35,7 +35,28 @@ jobs:
       - name: Build Android APK
         working-directory: android
         run: |
-          ./gradlew assembleRelease --no-daemon --stacktrace || ./gradlew assembleDebug --no-daemon --stacktrace
+          set +e
+          ./gradlew assembleRelease --no-daemon > ../gradle_build.log 2>&1
+          BUILD_STATUS=$?
+          if [ $BUILD_STATUS -ne 0 ]; then
+            echo "Release build failed with exit code $BUILD_STATUS. Trying assembleDebug..." >> ../gradle_build.log
+            ./gradlew assembleDebug --no-daemon >> ../gradle_build.log 2>&1
+            BUILD_STATUS=$?
+          fi
+          
+          echo "## Gradle Output Summary" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 80 ../gradle_build.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          
+          exit $BUILD_STATUS
+
+      - name: Upload Build Log on Failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: gradle_build.log
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4

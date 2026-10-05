@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Set up Java JDK
         uses: actions/setup-java@v4
@@ -25,22 +24,18 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Prebuild Android project
-        run: npx expo prebuild --platform android
+      - name: Make Gradlew Executable
+        run: chmod +x android/gradlew
 
-      - name: Build Android Release APK
+      - name: Build Android APK
         working-directory: android
         run: ./gradlew assembleRelease --no-daemon
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: 记账小宝-Release-APK
+          name: 记账小宝-Android-APK
           path: android/app/build/outputs/apk/release/*.apk
-
